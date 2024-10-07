@@ -68,9 +68,9 @@ const generateQuestions = (selectedNumbers: number[]): Question[] => {
 };
 
 export const timeLimit = {
-  1: 15000,
-  2: 10000,
-  3: 5000,
+  1: 10000,
+  2: 5000,
+  3: 2000,
 };
 
 export const machine = setup({
@@ -198,17 +198,17 @@ export const machine = setup({
         question: {
           entry: 'selectNewQuestion',
           after: {
-            5000: {
+            3000: {
+              guard: 'isTimeLimit',
+              actions: 'timeout',
+              target: 'result',
+            },
+            6000: {
               guard: 'isTimeLimit',
               actions: 'timeout',
               target: 'result',
             },
             10000: {
-              guard: 'isTimeLimit',
-              actions: 'timeout',
-              target: 'result',
-            },
-            15000: {
               guard: 'isTimeLimit',
               actions: 'timeout',
               target: 'result',
