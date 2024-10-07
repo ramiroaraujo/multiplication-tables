@@ -41,7 +41,12 @@ const generateQuestions = (selectedNumbers: number[], difficulty: number): Quest
   const shuffledCombinations = shuffleArray(allCombinations);
 
   // Determine number of questions based on difficulty
-  const questionCount = difficulty === 1 ? 15 : difficulty === 2 ? 20 : 30;
+  const maxQuestions = 40; // Set a maximum limit
+  const questionCount = Math.min(
+    difficulty === 1 ? 15 : difficulty === 2 ? 20 : 25,
+    maxQuestions,
+    shuffledCombinations.length // Ensure we don't exceed available combinations
+  );
 
   // Take up to questionCount combinations
   const selectedCombinations = shuffledCombinations.slice(0, questionCount);
