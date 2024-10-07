@@ -146,13 +146,16 @@ export default function GameComponent() {
                     onClick={() => handleAnswer(option)}
                     className={cn(
                       'w-full h-16 text-xl active:scale-95 transition-transform',
-                      state.matches({ playing: 'result' }) &&
-                        option === state.context.currentQuestion?.correctAnswer &&
-                        'bg-green-500',
-                      state.matches({ playing: 'result' }) &&
-                        option === lastAnsweredOption &&
-                        option !== state.context.currentQuestion?.correctAnswer &&
-                        'bg-red-500'
+                      state.matches({ playing: 'result' }) && {
+                        'bg-green-500 hover:bg-green-600':
+                          option === state.context.currentQuestion?.correctAnswer,
+                        'bg-red-500 hover:bg-red-600':
+                          option === lastAnsweredOption &&
+                          option !== state.context.currentQuestion?.correctAnswer,
+                        'opacity-50':
+                          option !== state.context.currentQuestion?.correctAnswer &&
+                          option !== lastAnsweredOption,
+                      }
                     )}
                     disabled={state.matches({ playing: 'result' })}
                   >
@@ -174,9 +177,9 @@ export default function GameComponent() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Multiplicación</TableHead>
-                    <TableHead className="text-center">Tu Respuesta</TableHead>
-                    <TableHead className="text-center">Respuesta Correcta</TableHead>
+                    <TableHead>Operación</TableHead>
+                    <TableHead className="text-center">Respuesta</TableHead>
+                    <TableHead className="text-center">Correcta</TableHead>
                     <TableHead>Resultado</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -212,7 +215,7 @@ export default function GameComponent() {
         </div>
       </div>
       {state.matches('playing') && (
-        <div className="w-full mt-4">
+        <div className="w-full mt-20">
           <Button
             onClick={handleRestart}
             variant="outline"
