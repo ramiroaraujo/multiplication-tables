@@ -45,8 +45,11 @@ export default function GameComponent() {
   }, [state.context.questionStartTime, state.context.difficulty, state.value, state]);
 
   const handleStart = () => {
-    if (selectedNumbers.length < 2) {
-      alert('Por favor, elegí al menos 2 números');
+    const minNumbersRequired = selectedDifficulty === 1 ? 2 : selectedDifficulty === 2 ? 3 : 4;
+    if (selectedNumbers.length < minNumbersRequired) {
+      alert(
+        `Por favor, elegí al menos ${minNumbersRequired} números para el nivel de dificultad ${selectedDifficulty}`
+      );
       return;
     }
     send({ type: 'SELECT', difficulty: selectedDifficulty, selectedNumbers });
@@ -71,6 +74,14 @@ export default function GameComponent() {
     );
   };
 
+  const getMinNumbersRequired = (difficulty: number) => {
+    return difficulty === 1 ? 2 : difficulty === 2 ? 3 : 4;
+  };
+
+  const getButtonGridClass = (difficulty: number) => {
+    return difficulty === 2 ? 'grid-cols-2' : 'grid-cols-3';
+  };
+
   return (
     <div className="flex flex-col w-full max-w-sm md:max-w-md mx-auto px-4 py-6 h-full">
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Tablas de Multiplicar</h1>
@@ -92,7 +103,7 @@ export default function GameComponent() {
                 ))}
               </div>
               <h2 className="text-lg md:text-xl mt-4 mb-4 text-center">
-                Elegí al menos 2 números para multiplicar
+                Elegí al menos {getMinNumbersRequired(selectedDifficulty)} números para multiplicar
               </h2>
               <div className="grid grid-cols-4 gap-2 mb-4 w-full">
                 {[2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
@@ -110,7 +121,7 @@ export default function GameComponent() {
               <Button
                 onClick={handleStart}
                 className="w-full h-12 active:scale-95 transition-transform"
-                disabled={selectedNumbers.length < 2}
+                disabled={selectedNumbers.length < getMinNumbersRequired(selectedDifficulty)}
               >
                 Empezar Juego
               </Button>
@@ -123,13 +134,18 @@ export default function GameComponent() {
                 {state.context.currentQuestion.multiplier} = ?
               </h2>
               <Progress value={progress} className="w-full mb-4" />
-              <div className="grid grid-cols-2 gap-2 w-full">
+              <div
+                className={cn(
+                  'grid gap-2 w-full max-w-xs mx-auto',
+                  getButtonGridClass(state.context.difficulty)
+                )}
+              >
                 {state.context.currentQuestion.options.map((option, index) => (
                   <Button
                     key={index}
                     onClick={() => handleAnswer(option)}
                     className={cn(
-                      'w-full h-12 active:scale-95 transition-transform',
+                      'w-full h-16 text-xl active:scale-95 transition-transform',
                       state.matches({ playing: 'result' }) &&
                         option === state.context.currentQuestion?.correctAnswer &&
                         'bg-green-500',
