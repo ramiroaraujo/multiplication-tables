@@ -62,7 +62,6 @@ export default function GameComponent() {
   const handleAnswer = (selectedOption: number) => {
     if (state.matches({ playing: 'question' })) {
       setLastAnsweredOption(selectedOption);
-      playSound('tap');
       send({ type: 'ANSWER', selectedOption });
 
       // Play right or wrong sound after a short delay
