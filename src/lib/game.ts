@@ -31,15 +31,24 @@ const generateQuestions = (selectedNumbers: number[]): Question[] => {
   const questions: Question[] = [];
   const possibleMultipliers = [2, 3, 4, 5, 6, 7, 8, 9];
 
-  while (questions.length < 20) {
-    const multiplicand = selectedNumbers[Math.floor(Math.random() * selectedNumbers.length)];
-    const multiplier = possibleMultipliers[Math.floor(Math.random() * possibleMultipliers.length)];
+  // Generate all possible unique combinations
+  const allCombinations = selectedNumbers.flatMap((multiplicand) =>
+    possibleMultipliers.map((multiplier) => ({ multiplicand, multiplier }))
+  );
+
+  // Shuffle the combinations
+  const shuffledCombinations = shuffleArray(allCombinations);
+
+  // Take up to 20 combinations
+  const selectedCombinations = shuffledCombinations.slice(0, 20);
+
+  for (const { multiplicand, multiplier } of selectedCombinations) {
     const correctAnswer = multiplicand * multiplier;
 
     // Generate wrong options
     const wrongOptions = new Set<number>();
     while (wrongOptions.size < 3) {
-      const wrongAnswer = correctAnswer + Math.floor(Math.random() * 5) - 2; // Generate numbers close to the correct answer
+      const wrongAnswer = correctAnswer + Math.floor(Math.random() * 5) - 2;
       if (wrongAnswer !== correctAnswer && wrongAnswer > 0) {
         wrongOptions.add(wrongAnswer);
       }
@@ -47,20 +56,15 @@ const generateQuestions = (selectedNumbers: number[]): Question[] => {
 
     const options = shuffleArray([correctAnswer, ...Array.from(wrongOptions)]);
 
-    const question: Question = {
+    questions.push({
       multiplicand,
       multiplier,
       correctAnswer,
       options,
-    };
-
-    // Ensure the question is unique
-    if (!questions.some((q) => q.multiplicand === multiplicand && q.multiplier === multiplier)) {
-      questions.push(question);
-    }
+    });
   }
 
-  return shuffleArray(questions);
+  return questions;
 };
 
 export const timeLimit = {
