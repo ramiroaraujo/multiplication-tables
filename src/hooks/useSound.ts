@@ -1,30 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type SoundType = 'tap' | 'right' | 'wrong';
 
 const useSound = () => {
-  const audioRefs = useRef<Record<SoundType, HTMLAudioElement>>({
-    tap: new Audio(),
-    right: new Audio(),
-    wrong: new Audio(),
+  const [isClient, setIsClient] = useState(false);
+  const audioRefs = useRef<Record<SoundType, HTMLAudioElement | null>>({
+    tap: null,
+    right: null,
+    wrong: null,
   });
 
   useEffect(() => {
+    setIsClient(true);
+
     const loadAudio = (type: SoundType) => {
-      audioRefs.current[type].src = `/sounds/${type}.webm`;
-      audioRefs.current[type].preload = 'auto'; // Explicitly set preload to 'auto'
-
-      // Start loading the audio file
-      audioRefs.current[type].load();
-
-      // Optional: You can also trigger a load event listener to ensure it's loaded
-      audioRefs.current[type].addEventListener(
-        'canplaythrough',
-        () => {
-          console.log(`${type} sound loaded`);
-        },
-        { once: true }
-      );
+      if (typeof window !== 'undefined' && window.Audio) {
+        audioRefs.current[type] = new Audio(`/sounds/${type}.webm`);
+        audioRefs.current[type]!.preload = 'auto';
+        audioRefs.current[type]!.load();
+      }
     };
 
     loadAudio('tap');
@@ -33,8 +27,12 @@ const useSound = () => {
   }, []);
 
   const playSound = (type: SoundType) => {
-    audioRefs.current[type].currentTime = 0;
-    audioRefs.current[type].play().catch((error) => console.error('Error playing sound:', error));
+    if (isClient && audioRefs.current[type]) {
+      audioRefs.current[type]!.currentTime = 0;
+      audioRefs.current[type]!.play().catch((error) =>
+        console.error('Error playing sound:', error)
+      );
+    }
   };
 
   return playSound;
