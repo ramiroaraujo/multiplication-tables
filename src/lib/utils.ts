@@ -13,36 +13,3 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   }
   return shuffled;
 };
-
-const correctAnswerExpressions = [
-  '¡Bien ahí!',
-  '¡Golazo!',
-  '¡Qué capo/a!',
-  '¡Sos un crack!',
-  '¡La rompiste!',
-  '¡Sos un fenómeno!',
-  '¡Qué grande!',
-  '¡Excelente, che!',
-  '¡Maravilloso, pibe/a!',
-  '¡Sos un/a groso/a!',
-  '¡Impecable, loco/a!',
-];
-
-const incorrectAnswerExpressions = [
-  '¡Uh, le erraste!',
-  '¡Casi, casi!',
-  '¡Por poco!',
-  '¡Apa, no era esa!',
-  '¡Uh, la próxima sale!',
-  '¡No pasa nada, che!',
-  '¡Tranqui, la próxima va!',
-  '¡Uh, estuviste cerca!',
-  '¡Fallaste por poco!',
-  '¡No era esa, pero seguí intentando!',
-  '¡Dale que la próxima sale!',
-];
-
-export function getRandomExpression(isCorrect: boolean): string {
-  const expressions = isCorrect ? correctAnswerExpressions : incorrectAnswerExpressions;
-  return shuffleArray(expressions)[0];
-}

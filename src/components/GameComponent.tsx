@@ -56,7 +56,7 @@ export default function GameComponent() {
 
   const handleStart = () => {
     if (selectedNumbers.length < 2) {
-      alert('Please select at least 2 numbers');
+      alert('Por favor, elegí al menos 2 números');
       return;
     }
     send({ type: 'SELECT', difficulty: selectedDifficulty, selectedNumbers });
@@ -83,12 +83,12 @@ export default function GameComponent() {
 
   return (
     <div className="flex flex-col w-full max-w-sm md:max-w-md mx-auto px-4 py-6 h-full">
-      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Multiplication Game</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Tablas de Multiplicar</h1>
       <div className="flex-grow flex flex-col justify-between">
         <div className="flex-grow flex flex-col items-center justify-center">
           {state.matches('difficultyAndNumberSelection') && (
             <div className="flex flex-col items-center w-full">
-              <h2 className="text-lg md:text-xl mb-4 text-center">Choose difficulty</h2>
+              <h2 className="text-lg md:text-xl mb-4 text-center">Elegí la dificultad</h2>
               <div className="flex gap-2 mb-4 w-full">
                 {[1, 2, 3].map((level) => (
                   <Button
@@ -102,7 +102,7 @@ export default function GameComponent() {
                 ))}
               </div>
               <h2 className="text-lg md:text-xl mt-4 mb-4 text-center">
-                Choose at least 2 numbers to multiply
+                Elegí al menos 2 números para multiplicar
               </h2>
               <div className="grid grid-cols-4 gap-2 mb-4 w-full">
                 {[2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
@@ -122,7 +122,7 @@ export default function GameComponent() {
                 className="w-full h-12 active:scale-95 transition-transform"
                 disabled={selectedNumbers.length < 2}
               >
-                Start Game
+                Empezar Juego
               </Button>
             </div>
           )}
@@ -158,20 +158,20 @@ export default function GameComponent() {
           )}
           {state.matches('gameOver') && (
             <div className="flex flex-col items-center w-full">
-              <h2 className="text-xl mb-4 text-center">Game Over!</h2>
+              <h2 className="text-xl mb-4 text-center">¡Juego terminado!</h2>
               <p className="text-lg mb-4 text-center">
-                Your score: {state.context.score} / {state.context.questions.length}
+                Tu puntaje: {state.context.score} / {state.context.questions.length}
               </p>
               <p className="text-lg mb-4 text-center">
-                Total time: {(state.context.timeTaken / 1000).toFixed(2)} seconds
+                Tiempo total: {(state.context.timeTaken / 1000).toFixed(2)} segundos
               </p>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Multiplication</TableHead>
-                    <TableHead className="text-center">Your Answer</TableHead>
-                    <TableHead className="text-center">Correct Answer</TableHead>
-                    <TableHead>Result</TableHead>
+                    <TableHead>Multiplicación</TableHead>
+                    <TableHead className="text-center">Tu Respuesta</TableHead>
+                    <TableHead className="text-center">Respuesta Correcta</TableHead>
+                    <TableHead>Resultado</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -189,7 +189,7 @@ export default function GameComponent() {
                       <TableCell className="text-center">2</TableCell>
                       <TableCell className="text-center">{question.correctAnswer}</TableCell>
                       <TableCell>
-                        {state.context.results[index] ? 'Correct' : 'Incorrect'}
+                        {state.context.results[index] ? 'Correcto' : 'Incorrecto'}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -199,7 +199,7 @@ export default function GameComponent() {
                 onClick={handleRestart}
                 className="w-full h-12 active:scale-95 transition-transform mt-4"
               >
-                Play Again
+                Jugar de Nuevo
               </Button>
             </div>
           )}
@@ -212,7 +212,7 @@ export default function GameComponent() {
             variant="outline"
             className="w-full h-12 active:scale-95 transition-transform bg-gray-700 text-white hover:bg-gray-600"
           >
-            Restart
+            Reiniciar
           </Button>
         </div>
       )}
