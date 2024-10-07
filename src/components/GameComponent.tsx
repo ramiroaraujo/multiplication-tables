@@ -96,7 +96,7 @@ export default function GameComponent() {
 
   return (
     <div className="flex flex-col w-full max-w-sm md:max-w-md mx-auto px-4 py-6 h-full">
-      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Tablas de Multiplición</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Tablas de Multiplicación</h1>
       <div className="flex-grow flex flex-col justify-between">
         <div className="flex-grow flex flex-col items-center justify-center">
           {state.matches('difficultyAndNumberSelection') && (
