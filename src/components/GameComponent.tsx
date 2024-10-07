@@ -193,8 +193,8 @@ export default function GameComponent() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Operación</TableHead>
-                    <TableHead className="text-center">Respuesta</TableHead>
                     <TableHead className="text-center">Correcta</TableHead>
+                    <TableHead className="text-center">Respuesta</TableHead>
                     <TableHead>Resultado</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -210,8 +210,8 @@ export default function GameComponent() {
                       <TableCell>
                         {question.multiplicand} × {question.multiplier}
                       </TableCell>
-                      <TableCell className="text-center">2</TableCell>
                       <TableCell className="text-center">{question.correctAnswer}</TableCell>
+                      <TableCell className="text-center">{state.context.answers[index]}</TableCell>
                       <TableCell className="flex justify-center">
                         {state.context.results[index] ? (
                           <CheckCircle className="text-green-500" />

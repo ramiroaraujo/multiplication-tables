@@ -19,6 +19,7 @@ export type GameContext = {
   score: number;
   timeTaken: number;
   questionStartTime?: number;
+  answers: (number | null)[]; // New field to store answers
 };
 
 export type GameEvents =
@@ -160,6 +161,7 @@ export const machine = setup({
         timeTaken: 0,
         questionStartTime: Date.now(),
         lastResult: undefined,
+        answers: new Array(questions.length).fill(null), // Initialize answers array
       };
     }),
     selectNewQuestion: assign(({ context }) => {
@@ -180,6 +182,11 @@ export const machine = setup({
         results: [...context.results, false],
         timeTaken: context.timeTaken + questionTime,
         questionStartTime: undefined,
+        answers: [
+          ...context.answers.slice(0, context.currentQuestionIndex),
+          null,
+          ...context.answers.slice(context.currentQuestionIndex + 1),
+        ],
       };
     }),
     reviewAnswer: assign(({ context, event }) => {
@@ -198,6 +205,11 @@ export const machine = setup({
         score: newScore,
         timeTaken: context.timeTaken + questionTime,
         questionStartTime: undefined,
+        answers: [
+          ...context.answers.slice(0, context.currentQuestionIndex),
+          event.selectedOption,
+          ...context.answers.slice(context.currentQuestionIndex + 1),
+        ],
       };
     }),
     incrementQuestionIndex: assign(({ context }) => {
@@ -217,6 +229,7 @@ export const machine = setup({
         score: 0,
         timeTaken: 0,
         questionStartTime: undefined,
+        answers: [], // Reset answers array
       };
     }),
   },
@@ -229,6 +242,7 @@ export const machine = setup({
     results: [],
     score: 0,
     timeTaken: 0,
+    answers: [], // Initialize answers array
   },
   id: 'game',
   initial: 'difficultyAndNumberSelection',
