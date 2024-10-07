@@ -19,6 +19,7 @@ export type GameContext = {
   score: number;
   timeTaken: number;
   questionStartTime?: number;
+  resultStartTime?: number;
   answers: (number | null)[]; // New field to store answers
 };
 
@@ -55,7 +56,7 @@ const generateQuestions = (selectedNumbers: number[], difficulty: number): Quest
     const correctAnswer = multiplicand * multiplier;
 
     // Generate options based on difficulty
-    const optionsCount = difficulty === 1 ? 3 : difficulty === 2 ? 4 : 6;
+    const optionsCount = Math.min(difficulty === 1 ? 3 : difficulty === 2 ? 4 : 5, 6);
     const options = generateOptions(
       correctAnswer,
       multiplicand,
@@ -147,6 +148,19 @@ export const machine = setup({
       const currentTime = Date.now();
       const timeLimitForDifficulty = timeLimit[context.difficulty as 1 | 2 | 3];
       return currentTime - context.questionStartTime! >= timeLimitForDifficulty;
+    },
+    isTimeout: ({ context }) => {
+      const currentTime = Date.now();
+      switch (context.difficulty) {
+        case 1:
+          return currentTime - context.resultStartTime! >= 1500;
+        case 2:
+          return currentTime - context.resultStartTime! >= 800;
+        case 3:
+          return currentTime - context.resultStartTime! >= 500;
+        default:
+          return true;
+      }
     },
   },
   actions: {
@@ -296,6 +310,7 @@ export const machine = setup({
           },
         },
         result: {
+          entry: assign({ resultStartTime: () => Date.now() }),
           on: {
             NEXT: {
               target: 'next',
@@ -303,6 +318,15 @@ export const machine = setup({
           },
           after: {
             500: {
+              guard: 'isTimeout',
+              target: 'next',
+            },
+            800: {
+              guard: 'isTimeout',
+              target: 'next',
+            },
+            1500: {
+              guard: 'isTimeout',
               target: 'next',
             },
           },
