@@ -143,7 +143,7 @@ export default function GameComponent() {
             </div>
           )}
           {state.matches('playing') && state.context.currentQuestion && (
-            <div className="flex flex-col items-center w-full">
+            <div className="flex flex-col items-center w-full select-none">
               <h2 className="text-lg md:text-xl font-bold mb-4 text-center">
                 {state.context.currentQuestion.multiplicand} ×{' '}
                 {state.context.currentQuestion.multiplier} = ?
