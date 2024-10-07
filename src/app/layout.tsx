@@ -5,9 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Tablas de Multiplicar',
+  title: 'Tablas de Multiplicación',
   description:
-    'Juego de tablas de multiplicar para niños. Elige la dificultad y los números a multiplicar.',
+    'Juego de tablas de multiplicación para niños y no tan niños. Elegí la dificultad y los números a multiplicar.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
-        <title>Tablas de Multiplicar</title>
+        <title>Tablas de Multiplición</title>
       </head>
       <body className={inter.className}>{children}</body>
     </html>
