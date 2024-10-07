@@ -15,6 +15,8 @@ import {
 } from '@/components/ui/table';
 import { machine, timeLimit } from '@/lib/game';
 import { cn } from '@/lib/utils';
+import { CheckCircle, XCircle } from 'lucide-react';
+import useSound from '@/hooks/useSound';
 
 export default function GameComponent() {
   const [state, send] = useMachine(machine);
@@ -22,6 +24,7 @@ export default function GameComponent() {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [progress, setProgress] = useState(100);
   const [lastAnsweredOption, setLastAnsweredOption] = useState<number | null>(null);
+  const playSound = useSound();
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -42,7 +45,7 @@ export default function GameComponent() {
         clearInterval(intervalId);
       }
     };
-  }, [state.context.questionStartTime, state.context.difficulty, state.value, state]);
+  }, [state.context.questionStartTime, state.context.difficulty, state.value]);
 
   const handleStart = () => {
     const minNumbersRequired = selectedDifficulty === 1 ? 2 : selectedDifficulty === 2 ? 3 : 4;
@@ -52,23 +55,33 @@ export default function GameComponent() {
       );
       return;
     }
+    playSound('tap');
     send({ type: 'SELECT', difficulty: selectedDifficulty, selectedNumbers });
   };
 
   const handleAnswer = (selectedOption: number) => {
     if (state.matches({ playing: 'question' })) {
       setLastAnsweredOption(selectedOption);
+      playSound('tap');
       send({ type: 'ANSWER', selectedOption });
+
+      // Play right or wrong sound after a short delay
+      setTimeout(() => {
+        const isCorrect = selectedOption === state.context.currentQuestion?.correctAnswer;
+        playSound(isCorrect ? 'right' : 'wrong');
+      }, 100);
     }
   };
 
   const handleRestart = () => {
+    playSound('tap');
     send({ type: 'RESTART' });
     setSelectedNumbers([]);
     setLastAnsweredOption(null);
   };
 
   const toggleNumber = (number: number) => {
+    playSound('tap');
     setSelectedNumbers((prev) =>
       prev.includes(number) ? prev.filter((n) => n !== number) : [...prev, number]
     );
@@ -94,7 +107,10 @@ export default function GameComponent() {
                 {[1, 2, 3].map((level) => (
                   <Button
                     key={level}
-                    onClick={() => setSelectedDifficulty(level)}
+                    onClick={() => {
+                      playSound('tap');
+                      setSelectedDifficulty(level);
+                    }}
                     variant={selectedDifficulty === level ? 'default' : 'outline'}
                     className="flex-1 h-12 active:scale-95 transition-transform"
                   >
@@ -197,8 +213,12 @@ export default function GameComponent() {
                       </TableCell>
                       <TableCell className="text-center">2</TableCell>
                       <TableCell className="text-center">{question.correctAnswer}</TableCell>
-                      <TableCell>
-                        {state.context.results[index] ? 'Correcto' : 'Incorrecto'}
+                      <TableCell className="flex justify-center">
+                        {state.context.results[index] ? (
+                          <CheckCircle className="text-green-500" />
+                        ) : (
+                          <XCircle className="text-red-500" />
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
