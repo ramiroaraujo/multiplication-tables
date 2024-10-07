@@ -5,9 +5,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Provincias y Capitales',
+  title: 'Tablas de Multiplicar',
   description:
-    'Juego de preguntas y respuestas para aprender las provincias y capitales de Argentina',
+    'Juego de tablas de multiplicar para niños. Elige la dificultad y los números a multiplicar.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
