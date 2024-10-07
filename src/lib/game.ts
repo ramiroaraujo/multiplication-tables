@@ -228,7 +228,7 @@ export const machine = setup({
             },
           },
           after: {
-            2500: {
+            500: {
               target: 'next',
             },
           },

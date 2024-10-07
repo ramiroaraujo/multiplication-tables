@@ -42,17 +42,7 @@ export default function GameComponent() {
         clearInterval(intervalId);
       }
     };
-  }, [state.context.questionStartTime, state.context.difficulty, state.value]);
-
-  useEffect(() => {
-    if (state.matches({ playing: 'result' })) {
-      const timer = setTimeout(() => {
-        send({ type: 'NEXT' });
-        setLastAnsweredOption(null);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [state, send]);
+  }, [state.context.questionStartTime, state.context.difficulty, state.value, state]);
 
   const handleStart = () => {
     if (selectedNumbers.length < 2) {
